@@ -1,0 +1,135 @@
+/* Dark Mode Theme for HealingSpace */
+/* This file is loaded dynamically when dark mode is enabled */
+
+:root {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-card: rgba(30, 30, 46, 0.95);
+    --text-primary: #eaeaea;
+    --text-secondary: #a0a0b0;
+    --accent-sage: #6b8e6b;
+    --accent-sage-dark: #8fbc8f;
+    --accent-lavender: #8b7b9e;
+    --accent-peach: #c98b82;
+    --accent-coral: #b87a70;
+    --border-color: #2d2d44;
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Override specific dark mode styles */
+body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+}
+
+.card {
+    background: rgba(30, 30, 46, 0.9);
+    border-color: #3d3d5c;
+}
+
+.mood-btn, .doll-action-btn, .grounding-btn {
+    background: #252540;
+    border-color: #3d3d5c;
+    color: var(--text-primary);
+}
+
+.mood-btn:hover, .doll-action-btn:hover {
+    background: #2d2d4a;
+    border-color: var(--accent-sage);
+}
+
+.mood-btn.selected {
+    background: var(--accent-sage);
+    color: white;
+}
+
+.timeline-event .event-content {
+    background: #252540;
+}
+
+.people-category, .pattern-stat, .resource-item {
+    background: #252540;
+}
+
+.person-card, .gallery-item {
+    background: #1e1e32;
+}
+
+.upload-zone {
+    border-color: #3d3d5c;
+    background: #1e1e32;
+}
+
+.upload-zone:hover {
+    border-color: var(--accent-sage);
+    background: rgba(107, 142, 107, 0.1);
+}
+
+input, textarea, select {
+    background: #252540;
+    color: var(--text-primary);
+    border-color: #3d3d5c;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--accent-sage);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(107, 142, 107, 0.2);
+}
+
+.disclaimer-card {
+    background: #3d3d2a;
+    border-color: #6b6b4a;
+    color: #d4d4b8;
+}
+
+/* Adjust images in dark mode */
+.gallery-item img {
+    opacity: 0.9;
+}
+
+.gallery-item:hover img {
+    opacity: 1;
+}
+
+/* Modal adjustments */
+.modal-content {
+    background: var(--bg-card);
+    border: 1px solid #3d3d5c;
+}
+
+/* Navigation */
+.navbar {
+    background: rgba(26, 26, 46, 0.95);
+    border-color: #2d2d44;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3d3d5c;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4d4d6c;
+}
+
+/* Selection color */
+::selection {
+    background: var(--accent-lavender);
+    color: white;
+}
+
+/* Focus styles */
+:focus-visible {
+    outline: 2px solid var(--accent-sage);
+    outline-offset: 2px;
+}
