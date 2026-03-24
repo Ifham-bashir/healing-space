@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealingSpace - Your Safe Place to Heal</title>
+    <title>HealingSpace - Your Complete Sanctuary</title>
     <link rel="stylesheet" href="style.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="style-light.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <span class="theme-icon">🌙</span>
+    </button>
+
     <!-- Navigation -->
     <nav id="navbar" class="navbar">
         <div class="nav-container">
             <div class="logo">HealingSpace</div>
-            <ul class="nav-links">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#check-in" class="nav-link">Check-In</a></li>
+                <li><a href="#inner-child" class="nav-link">Inner Child</a></li>
+                <li><a href="#timeline" class="nav-link">Timeline</a></li>
+                <li><a href="#patterns" class="nav-link">Patterns</a></li>
+                <li><a href="#safe-people" class="nav-link">Safe People</a></li>
+                <li><a href="#body-check" class="nav-link">Body</a></li>
+                <li><a href="#future-letter" class="nav-link">Future</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
                 <li><a href="#resources" class="nav-link">Resources</a></li>
             </ul>
         </div>
@@ -26,233 +42,499 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <h1 class="hero-title">Your safe place to heal</h1>
-            <p class="hero-subtitle">Healing isn't linear. Take it one breath at a time.</p>
-            <div class="progress-indicator" id="progressIndicator">
-                <span class="progress-icon">🌱</span>
-                <span class="progress-text">Your healing journey</span>
+            <p class="hero-subtitle">All the parts of you are welcome here.</p>
+            <div class="hero-stats" id="heroStats">
+                <div class="stat-item">
+                    <span class="stat-number" id="daysActive">0</span>
+                    <span class="stat-label">Days Active</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalCheckins">0</span>
+                    <span class="stat-label">Check-ins</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="patternsBroken">0</span>
+                    <span class="stat-label">Patterns Broken</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section about-section">
+    <!-- Mood & Body Check-In Section -->
+    <section id="check-in" class="section">
         <div class="container">
-            <div class="card about-card">
-                <h2 class="section-title">About HealingSpace</h2>
-                <p class="about-text">
-                    This space was created for anyone navigating emotional pain, working through inner child healing, 
-                    or simply seeking a moment of peace. We believe that healing is hard, slow, and deeply personal. 
-                    There is no timeline you must follow.
-                </p>
-                <p class="about-text">
-                    Here, you'll find gentle tools for grounding, reflection prompts that honor your pace, 
-                    and a private space to connect with your inner child. Everything you share stays on your device—
-                    this is your confidential sanctuary.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mood Check-In Section -->
-    <section id="mood-checkin" class="section mood-section">
-        <div class="container">
-            <div class="card mood-card">
-                <h2 class="section-title">How are you feeling right now?</h2>
-                <p class="section-subtitle">Check in with yourself. No judgment, just awareness.</p>
+            <div class="card">
+                <h2 class="section-title">How are you arriving today?</h2>
+                <p class="section-subtitle">Check in with your emotions and body. No judgment, just awareness.</p>
                 
-                <div class="mood-selector" id="moodSelector">
-                    <button class="mood-btn" data-mood="overwhelmed" aria-label="Overwhelmed">
-                        <span class="mood-emoji">😔</span>
-                        <span class="mood-label">Overwhelmed</span>
-                    </button>
-                    <button class="mood-btn" data-mood="anxious" aria-label="Anxious">
-                        <span class="mood-emoji">😰</span>
-                        <span class="mood-label">Anxious</span>
-                    </button>
-                    <button class="mood-btn" data-mood="sad" aria-label="Sad">
-                        <span class="mood-emoji">😢</span>
-                        <span class="mood-label">Sad</span>
-                    </button>
-                    <button class="mood-btn" data-mood="numb" aria-label="Numb">
-                        <span class="mood-emoji">😶</span>
-                        <span class="mood-label">Numb</span>
-                    </button>
-                    <button class="mood-btn" data-mood="tired" aria-label="Tired">
-                        <span class="mood-emoji">😴</span>
-                        <span class="mood-label">Tired</span>
-                    </button>
-                    <button class="mood-btn" data-mood="okay" aria-label="Okay">
-                        <span class="mood-emoji">😐</span>
-                        <span class="mood-label">Okay</span>
-                    </button>
-                    <button class="mood-btn" data-mood="hopeful" aria-label="Hopeful">
-                        <span class="mood-emoji">🌤️</span>
-                        <span class="mood-label">Hopeful</span>
-                    </button>
-                    <button class="mood-btn" data-mood="calm" aria-label="Calm">
-                        <span class="mood-emoji">😌</span>
-                        <span class="mood-label">Calm</span>
-                    </button>
+                <div class="checkin-tabs">
+                    <button class="tab-btn active" data-tab="mood">Mood</button>
+                    <button class="tab-btn" data-tab="body">Body Scan</button>
                 </div>
 
-                <div class="mood-message" id="moodMessage"></div>
-                <div class="mood-history" id="moodHistory"></div>
+                <div class="tab-content active" id="moodTab">
+                    <div class="mood-selector" id="moodSelector">
+                        <button class="mood-btn" data-mood="overwhelmed">
+                            <span class="mood-emoji">😔</span>
+                            <span class="mood-label">Overwhelmed</span>
+                        </button>
+                        <button class="mood-btn" data-mood="anxious">
+                            <span class="mood-emoji">😰</span>
+                            <span class="mood-label">Anxious</span>
+                        </button>
+                        <button class="mood-btn" data-mood="sad">
+                            <span class="mood-emoji">😢</span>
+                            <span class="mood-label">Sad</span>
+                        </button>
+                        <button class="mood-btn" data-mood="angry">
+                            <span class="mood-emoji">😤</span>
+                            <span class="mood-label">Angry</span>
+                        </button>
+                        <button class="mood-btn" data-mood="numb">
+                            <span class="mood-emoji">😶</span>
+                            <span class="mood-label">Numb</span>
+                        </button>
+                        <button class="mood-btn" data-mood="tired">
+                            <span class="mood-emoji">😴</span>
+                            <span class="mood-label">Tired</span>
+                        </button>
+                        <button class="mood-btn" data-mood="okay">
+                            <span class="mood-emoji">😐</span>
+                            <span class="mood-label">Okay</span>
+                        </button>
+                        <button class="mood-btn" data-mood="hopeful">
+                            <span class="mood-emoji">🌤️</span>
+                            <span class="mood-label">Hopeful</span>
+                        </button>
+                        <button class="mood-btn" data-mood="calm">
+                            <span class="mood-emoji">😌</span>
+                            <span class="mood-label">Calm</span>
+                        </button>
+                        <button class="mood-btn" data-mood="grateful">
+                            <span class="mood-emoji">🌻</span>
+                            <span class="mood-label">Grateful</span>
+                        </button>
+                    </div>
+                    <div class="mood-message" id="moodMessage"></div>
+                </div>
+
+                <div class="tab-content" id="bodyTab">
+                    <div id="bodyCheckContainer"></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Daily Prompt Section -->
-    <section id="daily-prompt" class="section prompt-section">
+    <!-- Daily Prompt -->
+    <section class="section prompt-section">
         <div class="container">
             <div class="card prompt-card">
                 <h2 class="section-title">Today's Reflection</h2>
                 <div class="prompt-container">
-                    <p class="prompt-text" id="promptText">Loading a gentle prompt for you...</p>
-                    <button class="btn btn-secondary" id="refreshPromptBtn">
-                        <span>↻</span> New Prompt
-                    </button>
+                    <p class="prompt-text" id="promptText">Loading...</p>
+                    <button class="btn btn-secondary" id="refreshPromptBtn">↻ New Prompt</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Inner Child Connection Section -->
-    <section id="inner-child" class="section inner-child-section">
+    <!-- Inner Child Doll Companion -->
+    <section id="inner-child" class="section">
         <div class="container">
             <div class="card inner-child-card">
-                <h2 class="section-title">Connect With Your Inner Child</h2>
-                <p class="section-subtitle">Write a message to the younger version of you. What do they need to hear?</p>
+                <h2 class="section-title">Inner Child Companion</h2>
+                <p class="section-subtitle">Your companion is here to hold space for your younger self.</p>
                 
-                <div class="journal-area">
-                    <textarea 
-                        id="innerChildInput" 
-                        class="journal-textarea" 
-                        placeholder="Dear younger me... (Your words are private and saved only on your device)"
-                        rows="6"
-                    ></textarea>
+                <div class="doll-container" id="dollContainer">
+                    <div class="doll-avatar" id="dollAvatar">🧸</div>
+                    <div class="doll-status" id="dollStatus">Your companion is here for you</div>
                     
+                    <div class="doll-actions">
+                        <button class="doll-action-btn" data-action="hug">
+                            <span>🤗</span>
+                            <label>Send a Hug</label>
+                        </button>
+                        <button class="doll-action-btn" data-action="talk">
+                            <span>💬</span>
+                            <label>Talk to Them</label>
+                        </button>
+                        <button class="doll-action-btn" data-action="voice">
+                            <span>🎙️</span>
+                            <label>Voice Note</label>
+                        </button>
+                        <button class="doll-action-btn" data-action="care">
+                            <span>💝</span>
+                            <label>Give Care</label>
+                        </button>
+                    </div>
+
+                    <div class="voice-recorder" id="voiceRecorder" style="display: none;">
+                        <div class="recording-indicator" id="recordingIndicator">
+                            <span class="recording-dot"></span>
+                            <span>Recording...</span>
+                        </div>
+                        <div class="recording-controls">
+                            <button class="btn btn-primary" id="startRecord">Start Recording</button>
+                            <button class="btn btn-secondary" id="stopRecord" disabled>Stop</button>
+                        </div>
+                        <div class="recordings-list" id="recordingsList"></div>
+                    </div>
+
+                    <div class="doll-messages" id="dollMessages"></div>
+                </div>
+
+                <div class="inner-child-journal">
+                    <h3>Messages to Your Younger Self</h3>
+                    <textarea id="innerChildInput" class="journal-textarea" placeholder="What does your younger self need to hear today?" rows="4"></textarea>
                     <div class="journal-actions">
-                        <button class="btn btn-primary" id="saveMessageBtn">Save Message</button>
-                        <button class="btn btn-secondary" id="viewPastBtn">View Past Messages</button>
-                        <button class="btn btn-text" id="clearJournalBtn">Clear Journal</button>
+                        <button class="btn btn-primary" id="saveChildMessage">Save Message</button>
+                        <button class="btn btn-secondary" id="viewChildMessages">View Past</button>
+                    </div>
+                    <div class="past-messages-container" id="childMessagesContainer" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trauma Timeline -->
+    <section id="timeline" class="section">
+        <div class="container">
+            <div class="card timeline-card">
+                <h2 class="section-title">Your Healing Timeline</h2>
+                <p class="section-subtitle">Map your journey. Honor what happened. See your resilience.</p>
+                
+                <div class="timeline-controls">
+                    <button class="btn btn-primary" id="addTimelineEvent">+ Add Memory</button>
+                    <div class="timeline-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="difficult">Difficult</button>
+                        <button class="filter-btn" data-filter="healing">Healing</button>
+                        <button class="filter-btn" data-filter="milestone">Milestones</button>
                     </div>
                 </div>
 
-                <div class="past-messages-container" id="pastMessagesContainer" style="display: none;">
-                    <h3 class="past-messages-title">Your Past Messages</h3>
-                    <div class="past-messages-list" id="pastMessagesList"></div>
-                    <button class="btn btn-secondary" id="exportJournalBtn">Export Journal as .txt</button>
+                <div class="timeline-container" id="timelineContainer">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-events" id="timelineEvents"></div>
                 </div>
 
-                <div class="save-confirmation" id="saveConfirmation"></div>
+                <div class="timeline-empty" id="timelineEmpty">
+                    <p>Your timeline is empty. When you're ready, add your first memory.</p>
+                    <p class="timeline-hint">This is your private space. No one else will see this.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Quick Grounding Tools Section -->
-    <section id="grounding-tools" class="section grounding-section">
+    <!-- Pattern Breaker Tracker -->
+    <section id="patterns" class="section">
         <div class="container">
-            <div class="card grounding-card">
-                <h2 class="section-title">Quick Grounding Tools</h2>
-                <p class="section-subtitle">When emotions feel too big, these techniques can help you return to the present.</p>
+            <div class="card patterns-card">
+                <h2 class="section-title">Pattern Breaker</h2>
+                <p class="section-subtitle">Notice the cycles. Choose differently. Track your victories.</p>
                 
-                <div class="grounding-grid">
-                    <button class="grounding-btn" data-tool="breathing" id="breathingBtn">
-                        <span class="grounding-icon">🫁</span>
-                        <span class="grounding-name">Box Breathing</span>
-                        <span class="grounding-desc">4 counts in, hold, out, hold</span>
-                    </button>
-                    
-                    <button class="grounding-btn" data-tool="senses" id="sensesBtn">
-                        <span class="grounding-icon">👁️</span>
-                        <span class="grounding-name">5-4-3-2-1 Senses</span>
-                        <span class="grounding-desc">Anchor through your senses</span>
-                    </button>
-                    
-                    <button class="grounding-btn" data-tool="bodyscan" id="bodyscanBtn">
-                        <span class="grounding-icon">🧘</span>
-                        <span class="grounding-name">Body Scan</span>
-                        <span class="grounding-desc">Release tension gradually</span>
-                    </button>
-                    
-                    <button class="grounding-btn" data-tool="coldwater" id="coldwaterBtn">
-                        <span class="grounding-icon">💧</span>
-                        <span class="grounding-name">Cold Water</span>
-                        <span class="grounding-desc">Splash face or hold ice</span>
-                    </button>
+                <div class="patterns-layout">
+                    <div class="pattern-input-area">
+                        <h3>What pattern showed up today?</h3>
+                        <select id="patternSelect" class="pattern-select">
+                            <option value="">Select or type a pattern...</option>
+                            <option value="people-pleasing">People-pleasing</option>
+                            <option value="isolation">Isolating when hurt</option>
+                            <option value="overworking">Overworking to avoid feelings</option>
+                            <option value="negative-self-talk">Negative self-talk</option>
+                            <option value="perfectionism">Perfectionism</option>
+                            <option value="conflict-avoidance">Avoiding conflict</option>
+                            <option value="emotional-eating">Using food to cope</option>
+                            <option value="procrastination">Procrastination from fear</option>
+                            <option value="custom">+ Add custom pattern</option>
+                        </select>
+                        
+                        <input type="text" id="customPattern" class="pattern-input" placeholder="Name your pattern..." style="display: none;">
+                        
+                        <div class="pattern-choice" id="patternChoice" style="display: none;">
+                            <p>Did you catch yourself in this pattern today?</p>
+                            <div class="choice-buttons">
+                                <button class="btn btn-pattern caught" id="caughtPattern">
+                                    <span>✓</span> I noticed it
+                                </button>
+                                <button class="btn btn-pattern broken" id="brokePattern">
+                                    <span>✓</span> I broke it
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pattern-reflection" id="patternReflection" style="display: none;">
+                            <textarea placeholder="What triggered this? What did you do differently? (Optional)" rows="3"></textarea>
+                            <button class="btn btn-primary" id="savePatternEntry">Save Entry</button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-stats">
+                        <h3>Your Progress</h3>
+                        <div class="stats-grid" id="patternStats">
+                            <div class="pattern-stat">
+                                <span class="stat-value" id="totalPatterns">0</span>
+                                <span class="stat-label">Times Noticed</span>
+                            </div>
+                            <div class="pattern-stat">
+                                <span class="stat-value" id="brokenPatterns">0</span>
+                                <span class="stat-label">Times Broken</span>
+                            </div>
+                            <div class="pattern-stat">
+                                <span class="stat-value" id="streakDays">0</span>
+                                <span class="stat-label">Day Streak</span>
+                            </div>
+                        </div>
+                        
+                        <div class="recent-patterns" id="recentPatterns">
+                            <h4>Recent Entries</h4>
+                            <div class="entries-list"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Grounding Tool Modals -->
-    <div class="modal" id="groundingModal" style="display: none;">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose" aria-label="Close">×</button>
-            <div class="modal-body" id="modalBody">
-                <!-- Dynamic content inserted by JS -->
+    <!-- Safe People List -->
+    <section id="safe-people" class="section">
+        <div class="container">
+            <div class="card safe-people-card">
+                <h2 class="section-title">Who Saw You?</h2>
+                <p class="section-subtitle">Track the people who make you feel safe vs. those who don't. Knowledge is protection.</p>
+                
+                <div class="safe-people-layout">
+                    <div class="people-form">
+                        <h3>Add Someone</h3>
+                        <input type="text" id="personName" placeholder="Name or nickname" class="people-input">
+                        
+                        <div class="safety-rating">
+                            <p>How do they make you feel?</p>
+                            <div class="rating-scale">
+                                <button class="rating-btn unsafe" data-rating="unsafe">😰 Unsafe</button>
+                                <button class="rating-btn neutral" data-rating="neutral">😐 Neutral</button>
+                                <button class="rating-btn safe" data-rating="safe">🌻 Safe</button>
+                            </div>
+                        </div>
+
+                        <textarea id="personNotes" placeholder="Why do they feel this way? What do they do? (Optional)" rows="3" class="people-textarea"></textarea>
+                        
+                        <div class="person-traits" id="personTraits">
+                            <p>Check all that apply:</p>
+                            <label><input type="checkbox" value="listens"> Listens without judging</label>
+                            <label><input type="checkbox" value="validates"> Validates my feelings</label>
+                            <label><input type="checkbox" value="respects-boundaries"> Respects my boundaries</label>
+                            <label><input type="checkbox" value="consistent"> Consistent and reliable</label>
+                            <label><input type="checkbox" value="dismissive"> Dismissive of my needs</label>
+                            <label><input type="checkbox" value="unpredictable"> Unpredictable</label>
+                            <label><input type="checkbox" value="boundary-violations"> Violates boundaries</label>
+                        </div>
+
+                        <button class="btn btn-primary" id="savePerson">Save Person</button>
+                    </div>
+
+                    <div class="people-lists">
+                        <div class="people-category safe-list">
+                            <h3>🌻 Safe People <span class="count" id="safeCount">0</span></h3>
+                            <div class="people-grid" id="safePeopleGrid"></div>
+                        </div>
+                        
+                        <div class="people-category unsafe-list">
+                            <h3>😰 Exercise Caution <span class="count" id="unsafeCount">0</span></h3>
+                            <div class="people-grid" id="unsafePeopleGrid"></div>
+                        </div>
+                        
+                        <div class="people-category neutral-list">
+                            <h3>😐 Neutral <span class="count" id="neutralCount">0</span></h3>
+                            <div class="people-grid" id="neutralPeopleGrid"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Body Check-In (Detailed) -->
+    <section id="body-check" class="section">
+        <div class="container">
+            <div class="card body-card">
+                <h2 class="section-title">Body Check-In</h2>
+                <p class="section-subtitle">Your body holds your history. Listen to what it's telling you.</p>
+                
+                <div class="body-map-container" id="bodyMapContainer">
+                    <div class="body-visual" id="bodyVisual">
+                        <!-- SVG Body Map -->
+                        <svg viewBox="0 0 200 400" class="body-svg">
+                            <!-- Simple body outline -->
+                            <path class="body-part" data-part="head" d="M100,20 C120,20 130,40 130,60 C130,80 120,90 100,90 C80,90 70,80 70,60 C70,40 80,20 100,20 Z" fill="#e8e4e0" stroke="#9caf88" stroke-width="2"/>
+                            <path class="body-part" data-part="chest" d="M70,95 L130,95 L125,160 L75,160 Z" fill="#e8e4e0" stroke="#9caf88" stroke-width="2"/>
+                            <path class="body-part" data-part="stomach" d="M75,165 L125,165 L120,220 L80,220 Z" fill="#e8e4e0" stroke="#9caf88" stroke-width="2"/>
+                            <path class="body-part" data-part="arms" d="M70,100 L40,180 M130,100 L160,180" fill="none" stroke="#9caf88" stroke-width="8" stroke-linecap="round"/>
+                            <path class="body-part" data-part="hands" d="M35,185 L30,200 M165,185 L170,200" fill="none" stroke="#9caf88" stroke-width="6" stroke-linecap="round"/>
+                            <path class="body-part" data-part="legs" d="M85,225 L75,350 M115,225 L125,350" fill="none" stroke="#9caf88" stroke-width="10" stroke-linecap="round"/>
+                        </svg>
+                        
+                        <div class="body-part-label" id="bodyPartLabel">Click a body part to check in</div>
+                    </div>
+
+                    <div class="body-check-form" id="bodyCheckForm" style="display: none;">
+                        <h4 id="selectedPartName">Head</h4>
+                        <div class="sensation-scale">
+                            <label>What sensation do you notice?</label>
+                            <div class="sensation-options">
+                                <button class="sensation-btn" data-sensation="tension">😣 Tension</button>
+                                <button class="sensation-btn" data-sensation="pain">😖 Pain</button>
+                                <button class="sensation-btn" data-sensation="numb">😶 Numb</button>
+                                <button class="sensation-btn" data-sensation="tingling">✨ Tingling</button>
+                                <button class="sensation-btn" data-sensation="warmth">🔥 Warmth</button>
+                                <button class="sensation-btn" data-sensation="relaxed">😌 Relaxed</button>
+                            </div>
+                        </div>
+                        
+                        <div class="intensity-slider">
+                            <label>Intensity (1-10)</label>
+                            <input type="range" min="1" max="10" value="5" id="intensityRange">
+                            <div class="intensity-labels">
+                                <span>Mild</span>
+                                <span>Moderate</span>
+                                <span>Intense</span>
+                            </div>
+                        </div>
+
+                        <textarea id="bodyNotes" placeholder="What does this area need? (Optional)" rows="2"></textarea>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="saveBodyCheck">Save Check-in</button>
+                            <button class="btn btn-text" id="cancelBodyCheck">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-history" id="bodyHistory">
+                    <h3>Recent Body Check-ins</h3>
+                    <div class="body-entries" id="bodyEntries"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Letter Locker -->
+    <section id="future-letter" class="section">
+        <div class="container">
+            <div class="card future-letter-card">
+                <h2 class="section-title">Letter to Future You</h2>
+                <p class="section-subtitle">Write a message to your future self. Lock it until you're ready.</p>
+                
+                <div class="letter-composer" id="letterComposer">
+                    <div class="letter-header">
+                        <input type="text" id="letterSubject" placeholder="Subject (optional)" class="letter-input">
+                        <div class="unlock-date">
+                            <label>Unlock on:</label>
+                            <input type="date" id="unlockDate" class="date-input">
+                            <select id="unlockPreset" class="preset-select">
+                                <option value="">Or choose...</option>
+                                <option value="1week">1 week</option>
+                                <option value="1month">1 month</option>
+                                <option value="3months">3 months</option>
+                                <option value="6months">6 months</option>
+                                <option value="1year">1 year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <textarea id="letterContent" class="letter-textarea" placeholder="Dear future me..." rows="8"></textarea>
+                    
+                    <div class="letter-actions">
+                        <button class="btn btn-primary" id="saveLetter">🔒 Lock Letter</button>
+                        <button class="btn btn-secondary" id="viewLetters">📬 View Letters</button>
+                    </div>
+                </div>
+
+                <div class="letters-vault" id="lettersVault" style="display: none;">
+                    <h3>Your Letter Vault</h3>
+                    <div class="letters-tabs">
+                        <button class="tab-btn active" data-tab="locked">🔒 Locked</button>
+                        <button class="tab-btn" data-tab="unlocked">🔓 Unlocked</button>
+                        <button class="tab-btn" data-tab="read">✓ Read</button>
+                    </div>
+                    <div class="letters-list" id="lettersList"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Healing Gallery -->
+    <section id="gallery" class="section">
+        <div class="container">
+            <div class="card gallery-card">
+                <h2 class="section-title">Healing Gallery</h2>
+                <p class="section-subtitle">A private space for images that comfort, inspire, or represent your journey.</p>
+                
+                <div class="gallery-upload">
+                    <div class="upload-zone" id="uploadZone">
+                        <span class="upload-icon">📷</span>
+                        <p>Drop images here or click to upload</p>
+                        <input type="file" id="galleryInput" accept="image/*" multiple style="display: none;">
+                    </div>
+                    <div class="upload-note">Images are stored locally on your device only</div>
+                </div>
+
+                <div class="gallery-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="comfort">Comfort</button>
+                    <button class="filter-btn" data-filter="inspiration">Inspiration</button>
+                    <button class="filter-btn" data-filter="memories">Memories</button>
+                    <button class="filter-btn" data-filter="art">My Art</button>
+                </div>
+
+                <div class="gallery-grid" id="galleryGrid"></div>
+                
+                <div class="gallery-empty" id="galleryEmpty">
+                    <p>Your gallery is empty. Add images that bring you peace.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Resources Section -->
-    <section id="resources" class="section resources-section">
+    <section id="resources" class="section">
         <div class="container">
             <div class="card resources-card">
-                <h2 class="section-title">Support Resources</h2>
-                <p class="section-subtitle">You don't have to do this alone. Professional support is available.</p>
+                <h2 class="section-title">Healing Resources</h2>
+                <p class="section-subtitle">Curated support for your journey. You don't have to do this alone.</p>
                 
-                <div class="resources-grid">
-                    <div class="resource-item">
-                        <h3 class="resource-title">Crisis Support</h3>
-                        <ul class="resource-list">
-                            <li><strong>988 Suicide & Crisis Lifeline:</strong> Call or text 988</li>
-                            <li><strong>Crisis Text Line:</strong> Text HOME to 741741</li>
-                            <li><strong>International Association for Suicide Prevention:</strong> <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener">Find resources by country</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="resource-item">
-                        <h3 class="resource-title">Mental Health Organizations</h3>
-                        <ul class="resource-list">
-                            <li><a href="https://www.nami.org" target="_blank" rel="noopener">NAMI (National Alliance on Mental Illness)</a></li>
-                            <li><a href="https://www.mentalhealthamerica.net" target="_blank" rel="noopener">Mental Health America</a></li>
-                            <li><a href="https://www.ptsd.va.gov" target="_blank" rel="noopener">National Center for PTSD</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="resource-item">
-                        <h3 class="resource-title">Therapy & Counseling</h3>
-                        <ul class="resource-list">
-                            <li><a href="https://www.psychologytoday.com/us/therapists" target="_blank" rel="noopener">Psychology Today Therapist Finder</a></li>
-                            <li><a href="https://www.betterhelp.com" target="_blank" rel="noopener">BetterHelp (Online Counseling)</a></li>
-                            <li><a href="https://openpathcollective.org" target="_blank" rel="noopener">Open Path Collective (Sliding Scale)</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="resource-item">
-                        <h3 class="resource-title">Trauma & Inner Child Work</h3>
-                        <ul class="resource-list">
-                            <li><a href="https://www.thetreeofhealth.com" target="_blank" rel="noopener">The Tree of Health (IFS Resources)</a></li>
-                            <li><a href="https://cptsdfoundation.org" target="_blank" rel="noopener">CPTSD Foundation</a></li>
-                            <li><a href="https://www.pete-walker.com" target="_blank" rel="noopener">Pete Walker (CPTSD Resources)</a></li>
-                        </ul>
-                    </div>
+                <div class="resources-tabs">
+                    <button class="tab-btn active" data-tab="crisis">Crisis</button>
+                    <button class="tab-btn" data-tab="therapy">Therapy</button>
+                    <button class="tab-btn" data-tab="books">Books</button>
+                    <button class="tab-btn" data-tab="podcasts">Podcasts</button>
+                    <button class="tab-btn" data-tab="apps">Apps</button>
+                </div>
+
+                <div class="tab-content active" id="crisisTab">
+                    <div class="resource-grid" id="crisisResources"></div>
+                </div>
+                <div class="tab-content" id="therapyTab">
+                    <div class="resource-grid" id="therapyResources"></div>
+                </div>
+                <div class="tab-content" id="booksTab">
+                    <div class="resource-grid" id="booksResources"></div>
+                </div>
+                <div class="tab-content" id="podcastsTab">
+                    <div class="resource-grid" id="podcastsResources"></div>
+                </div>
+                <div class="tab-content" id="appsTab">
+                    <div class="resource-grid" id="appsResources"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Disclaimer Section -->
+    <!-- Disclaimer -->
     <section class="section disclaimer-section">
         <div class="container">
             <div class="disclaimer-card">
-                <p class="disclaimer-text">
-                    <strong>Important:</strong> HealingSpace is a supportive tool for self-reflection and emotional awareness. 
-                    It is not a substitute for professional mental health treatment, therapy, or medical advice. 
-                    If you're experiencing a mental health crisis or having thoughts of harming yourself, 
-                    please reach out to a crisis helpline or emergency services immediately.
-                </p>
+                <p><strong>Important:</strong> HealingSpace is a supportive self-help tool, not a substitute for professional mental health treatment. If you're in crisis, please use the crisis resources above or call emergency services.</p>
             </div>
         </div>
     </section>
@@ -261,10 +543,30 @@
     <footer class="footer">
         <div class="container">
             <p class="footer-text">Built with care by <strong>Ifham Bashir</strong></p>
-            <p class="footer-subtext">Your healing matters. Be gentle with yourself.</p>
+            <p class="footer-subtext">For everyone who needed a safe place to heal.</p>
+            <button class="btn btn-text" id="exportAllData">📥 Export All My Data</button>
+            <button class="btn btn-text" id="clearAllData" style="color: #c0392b;">🗑️ Clear All Data</button>
         </div>
     </footer>
 
+    <!-- Modal Container -->
+    <div class="modal" id="mainModal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">×</button>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="user-data.js"></script>
+    <script src="inner-child.js"></script>
+    <script src="timeline.js"></script>
+    <script src="safe-people.js"></script>
+    <script src="body-check.js"></script>
+    <script src="future-letter.js"></script>
+    <script src="healing-gallery.js"></script>
+    <script src="pattern-tracker.js"></script>
+    <script src="resources.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
