@@ -1,0 +1,144 @@
+/**
+ * Pattern Tracker Module
+ * Breaking cycles and tracking progress
+ */
+
+const PatternTrackerModule = {
+    init() {
+        this.selectedPattern = null;
+        this.selectedAction = null;
+        this.initForm();
+        this.renderStats();
+        this.renderRecent();
+    },
+    
+    initForm() {
+        const select = document.getElementById('patternSelect');
+        const custom = document.getElementById('customPattern');
+        const choice = document.getElementById('patternChoice');
+        const reflection = document.getElementById('patternReflection');
+        
+        // Pattern selection
+        select?.addEventListener('change', () => {
+            if (select.value === 'custom') {
+                custom.style.display = 'block';
+                custom.focus();
+            } else if (select.value) {
+                this.selectedPattern = select.value;
+                custom.style.display = 'none';
+                choice.style.display = 'block';
+            } else {
+                choice.style.display = 'none';
+            }
+            reflection.style.display = 'none';
+        });
+        
+        // Custom pattern input
+        custom?.addEventListener('input', () => {
+            if (custom.value.trim()) {
+                this.selectedPattern = custom.value.trim();
+                choice.style.display = 'block';
+            }
+        });
+        
+        // Action buttons
+        document.getElementById('caughtPattern')?.addEventListener('click', () => {
+            this.selectedAction = 'caught';
+            this.showReflection();
+        });
+        
+        document.getElementById('brokePattern')?.addEventListener('click', () => {
+            this.selectedAction = 'broken';
+            this.showReflection();
+        });
+        
+        // Save entry
+        document.getElementById('savePatternEntry')?.addEventListener('click', () => {
+            this.saveEntry();
+        });
+    },
+    
+    showReflection() {
+        document.getElementById('patternReflection').style.display = 'block';
+        document.getElementById('patternReflection').scrollIntoView({ behavior: 'smooth' });
+    },
+    
+    saveEntry() {
+        const notes = document.querySelector('#patternReflection textarea').value;
+        
+        const entry = {
+            id: UserData.generateId(),
+            pattern: this.selectedPattern,
+            action: this.selectedAction,
+            notes,
+            date: new Date().toISOString()
+        };
+        
+        UserData.addToArray('patternEntries', entry);
+        
+        // Reset form
+        document.getElementById('patternSelect').value = '';
+        document.getElementById('customPattern').value = '';
+        document.getElementById('customPattern').style.display = 'none';
+        document.getElementById('patternChoice').style.display = 'none';
+        document.getElementById('patternReflection').style.display = 'none';
+        document.querySelector('#patternReflection textarea').value = '';
+        
+        this.renderStats();
+        this.renderRecent();
+        
+        // Show success
+        alert(this.selectedAction === 'broken' ? 
+            '🎉 Amazing! You broke the pattern today. That takes real awareness and strength.' : 
+            '👏 Noticing is the first step. You\'re building awareness.');
+    },
+    
+    renderStats() {
+        const entries = UserData.get('patternEntries') || [];
+        
+        const total = entries.length;
+        const broken = entries.filter(e => e.action === 'broken').length;
+        
+        // Calculate streak
+        let streak = 0;
+        const today = new Date().toDateString();
+        const dates = [...new Set(entries.map(e => new Date(e.date).toDateString()))].reverse();
+        
+        if (dates.includes(today)) {
+            streak = 1;
+            for (let i = 1; i < dates.length; i++) {
+                const prevDate = new Date(dates[i-1]);
+                const currDate = new Date(dates[i]);
+                const diff = (prevDate - currDate) / (1000 * 60 * 60 * 24);
+                if (diff === 1) streak++;
+                else break;
+            }
+        }
+        
+        document.getElementById('totalPatterns').textContent = total;
+        document.getElementById('brokenPatterns').textContent = broken;
+        document.getElementById('streakDays').textContent = streak;
+    },
+    
+    renderRecent() {
+        const container = document.querySelector('.entries-list');
+        const entries = UserData.get('patternEntries') || [];
+        const recent = entries.slice(0, 5);
+        
+        if (!container) return;
+        
+        container.innerHTML = recent.length ? recent.map(entry => `
+            <div style="padding: 1rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; border-left: 4px solid ${entry.action === 'broken' ? '#28a745' : '#ffc107'};">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                    <strong>${entry.pattern}</strong>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">${window.formatDate(entry.date)}</span>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                    ${entry.action === 'broken' ? '✓ Pattern broken' : '• Pattern noticed'}
+                </div>
+            </div>
+        `).join('') : '<p style="color: var(--text-secondary); font-style: italic;">No entries yet. Start by noticing a pattern today.</p>';
+    }
+};
+
+window.PatternTrackerModule = PatternTrackerModule;
