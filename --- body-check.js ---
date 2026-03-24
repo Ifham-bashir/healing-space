@@ -1,0 +1,131 @@
+/**
+ * Body Check Module
+ * Somatic awareness and body mapping
+ */
+
+const BodyCheckModule = {
+    init() {
+        this.selectedPart = null;
+        this.initBodyMap();
+        this.renderHistory();
+    },
+    
+    initBodyMap() {
+        const parts = document.querySelectorAll('.body-part');
+        const form = document.getElementById('bodyCheckForm');
+        const label = document.getElementById('bodyPartLabel');
+        const partName = document.getElementById('selectedPartName');
+        
+        parts.forEach(part => {
+            part.addEventListener('click', () => {
+                // Clear previous selection
+                parts.forEach(p => p.classList.remove('selected'));
+                part.classList.add('selected');
+                
+                this.selectedPart = part.dataset.part;
+                const partNames = {
+                    head: 'Head & Mind',
+                    chest: 'Chest & Heart',
+                    stomach: 'Stomach & Gut',
+                    arms: 'Arms & Hands',
+                    hands: 'Hands',
+                    legs: 'Legs & Feet'
+                };
+                
+                label.textContent = `Selected: ${partNames[this.selectedPart]}`;
+                partName.textContent = partNames[this.selectedPart];
+                form.style.display = 'block';
+                
+                // Scroll to form on mobile
+                if (window.innerWidth < 768) {
+                    form.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Sensation buttons
+        document.querySelectorAll('.sensation-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sensation-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+        
+        // Cancel button
+        document.getElementById('cancelBodyCheck')?.addEventListener('click', () => {
+            form.style.display = 'none';
+            parts.forEach(p => p.classList.remove('selected'));
+            label.textContent = 'Click a body part to check in';
+        });
+        
+        // Save button
+        document.getElementById('saveBodyCheck')?.addEventListener('click', () => {
+            this.saveCheck();
+        });
+    },
+    
+    saveCheck() {
+        const sensation = document.querySelector('.sensation-btn.selected')?.dataset.sensation;
+        const intensity = document.getElementById('intensityRange').value;
+        const notes = document.getElementById('bodyNotes').value;
+        
+        if (!sensation) {
+            alert('Please select a sensation');
+            return;
+        }
+        
+        const check = {
+            id: UserData.generateId(),
+            part: this.selectedPart,
+            sensation,
+            intensity: parseInt(intensity),
+            notes,
+            date: new Date().toISOString()
+        };
+        
+        UserData.addToArray('bodyChecks', check);
+        
+        // Reset form
+        document.getElementById('bodyCheckForm').style.display = 'none';
+        document.querySelectorAll('.body-part').forEach(p => p.classList.remove('selected'));
+        document.querySelectorAll('.sensation-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById('bodyNotes').value = '';
+        document.getElementById('bodyPartLabel').textContent = 'Click a body part to check in';
+        
+        this.renderHistory();
+    },
+    
+    renderHistory() {
+        const container = document.getElementById('bodyEntries');
+        const checks = UserData.get('bodyChecks') || [];
+        
+        if (!container) return;
+        
+        const recent = checks.slice(0, 5);
+        
+        container.innerHTML = recent.length ? recent.map(check => {
+            const partNames = {
+                head: 'Head', chest: 'Chest', stomach: 'Stomach',
+                arms: 'Arms', hands: 'Hands', legs: 'Legs'
+            };
+            const sensations = {
+                tension: '😣 Tension', pain: '😖 Pain', numb: '😶 Numb',
+                tingling: '✨ Tingling', warmth: '🔥 Warmth', relaxed: '😌 Relaxed'
+            };
+            
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; margin-bottom: 0.5rem;">
+                    <div>
+                        <strong>${partNames[check.part]}</strong> - ${sensations[check.sensation]}
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">${window.formatDate(check.date)}</div>
+                    </div>
+                    <div style="background: var(--accent-sage); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.9rem;">
+                        ${check.intensity}/10
+                    </div>
+                </div>
+            `;
+        }).join('') : '<p style="color: var(--text-secondary); text-align: center;">No check-ins yet. Start by clicking a body part.</p>';
+    }
+};
+
+window.BodyCheckModule = BodyCheckModule;
