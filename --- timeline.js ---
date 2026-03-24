@@ -1,0 +1,116 @@
+/**
+ * Timeline Module
+ * Visual trauma timeline for processing memories
+ */
+
+const TimelineModule = {
+    init() {
+        this.container = document.getElementById('timelineEvents');
+        this.empty = document.getElementById('timelineEmpty');
+        
+        this.initControls();
+        this.render();
+    },
+    
+    initControls() {
+        // Add event button
+        document.getElementById('addTimelineEvent')?.addEventListener('click', () => {
+            this.showEventModal();
+        });
+        
+        // Filters
+        document.querySelectorAll('.timeline-filters .filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.timeline-filters .filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.render(btn.dataset.filter);
+            });
+        });
+    },
+    
+    showEventModal() {
+        const content = `
+            <h3>Add to Your Timeline</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Honor your experience. This stays private.</p>
+            
+            <input type="text" id="eventTitle" placeholder="Event title (optional)" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 2px solid var(--border-color); border-radius: 8px;">
+            
+            <textarea id="eventDesc" placeholder="What happened? How did you feel? What did you learn about yourself?" rows="4" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 2px solid var(--border-color); border-radius: 8px; resize: vertical;"></textarea>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <input type="date" id="eventDate" style="padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px;">
+                <select id="eventType" style="padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px;">
+                    <option value="difficult">Difficult Experience</option>
+                    <option value="healing">Healing Moment</option>
+                    <option value="milestone">Milestone</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" onclick="TimelineModule.saveEvent()" style="width: 100%;">Save to Timeline</button>
+        `;
+        
+        window.showModal(content);
+        
+        // Set default date to today
+        setTimeout(() => {
+            document.getElementById('eventDate').valueAsDate = new Date();
+        }, 100);
+    },
+    
+    saveEvent() {
+        const title = document.getElementById('eventTitle').value || 'Untitled Memory';
+        const desc = document.getElementById('eventDesc').value;
+        const date = document.getElementById('eventDate').value;
+        const type = document.getElementById('eventType').value;
+        
+        if (!desc) {
+            alert('Please describe what happened.');
+            return;
+        }
+        
+        const event = {
+            id: UserData.generateId(),
+            title,
+            description: desc,
+            date: date || new Date().toISOString().split('T')[0],
+            type,
+            created: new Date().toISOString()
+        };
+        
+        UserData.addToArray('timelineEvents', event);
+        this.render();
+        closeModal();
+    },
+    
+    render(filter = 'all') {
+        let events = UserData.get('timelineEvents') || [];
+        
+        if (events.length === 0) {
+            this.container.innerHTML = '';
+            this.empty.style.display = 'block';
+            return;
+        }
+        
+        this.empty.style.display = 'none';
+        
+        // Sort by date
+        events.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // Filter
+        if (filter !== 'all') {
+            events = events.filter(e => e.type === filter);
+        }
+        
+        this.container.innerHTML = events.map(evt => `
+            <div class="timeline-event ${evt.type}">
+                <div class="event-content">
+                    <div class="event-date">${window.formatDate(evt.date)}</div>
+                    <div class="event-title">${evt.title}</div>
+                    <div class="event-description">${evt.description}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+};
+
+window.TimelineModule = TimelineModule;
