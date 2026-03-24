@@ -1,0 +1,113 @@
+/**
+ * Safe People Module
+ * Track who validates vs. harms - "Who Saw You?"
+ */
+
+const SafePeopleModule = {
+    init() {
+        this.currentRating = null;
+        this.initForm();
+        this.renderLists();
+    },
+    
+    initForm() {
+        // Rating buttons
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                this.currentRating = btn.dataset.rating;
+            });
+        });
+        
+        // Save button
+        document.getElementById('savePerson')?.addEventListener('click', () => {
+            this.savePerson();
+        });
+    },
+    
+    savePerson() {
+        const name = document.getElementById('personName').value.trim();
+        const notes = document.getElementById('personNotes').value.trim();
+        
+        if (!name) {
+            alert('Please enter a name');
+            return;
+        }
+        
+        if (!this.currentRating) {
+            alert('Please select how this person makes you feel');
+            return;
+        }
+        
+        // Collect traits
+        const traits = [];
+        document.querySelectorAll('#personTraits input:checked').forEach(cb => {
+            traits.push(cb.value);
+        });
+        
+        const person = {
+            id: UserData.generateId(),
+            name,
+            rating: this.currentRating,
+            notes,
+            traits,
+            dateAdded: new Date().toISOString()
+        };
+        
+        UserData.addToArray('safePeople', person);
+        
+        // Reset form
+        document.getElementById('personName').value = '';
+        document.getElementById('personNotes').value = '';
+        document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+        document.querySelectorAll('#personTraits input').forEach(cb => cb.checked = false);
+        this.currentRating = null;
+        
+        this.renderLists();
+    },
+    
+    renderLists() {
+        const people = UserData.get('safePeople') || [];
+        
+        const safe = people.filter(p => p.rating === 'safe');
+        const unsafe = people.filter(p => p.rating === 'unsafe');
+        const neutral = people.filter(p => p.rating === 'neutral');
+        
+        // Update counts
+        document.getElementById('safeCount').textContent = safe.length;
+        document.getElementById('unsafeCount').textContent = unsafe.length;
+        document.getElementById('neutralCount').textContent = neutral.length;
+        
+        // Render grids
+        this.renderGrid('safePeopleGrid', safe, 'safe');
+        this.renderGrid('unsafePeopleGrid', unsafe, 'unsafe');
+        this.renderGrid('neutralPeopleGrid', neutral, 'neutral');
+    },
+    
+    renderGrid(containerId, people, type) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        if (people.length === 0) {
+            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); font-style: italic;">No entries yet</p>';
+            return;
+        }
+        
+        container.innerHTML = people.map(p => `
+            <div class="person-card ${type}">
+                <div class="person-name">${p.name}</div>
+                ${p.traits.length ? `<div class="person-traits-list">${p.traits.slice(0, 3).join(', ')}${p.traits.length > 3 ? '...' : ''}</div>` : ''}
+                ${p.notes ? `<div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; font-style: italic;">"${p.notes.substring(0, 50)}${p.notes.length > 50 ? '...' : ''}"</div>` : ''}
+                <button onclick="SafePeopleModule.deletePerson('${p.id}')" style="position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; cursor: pointer; opacity: 0.5;">×</button>
+            </div>
+        `).join('');
+    },
+    
+    deletePerson(id) {
+        UserData.removeFromArray('safePeople', id);
+        this.renderLists();
+    }
+};
+
+window.SafePeopleModule = SafePeopleModule;
