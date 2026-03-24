@@ -1,0 +1,158 @@
+/**
+ * Resources Module
+ * Curated crisis lines, therapy, books, podcasts
+ */
+
+const ResourcesModule = {
+    data: {
+        crisis: [
+            {
+                title: "988 Suicide & Crisis Lifeline",
+                meta: "Call or text 988",
+                description: "24/7, free and confidential support for people in distress.",
+                link: "tel:988"
+            },
+            {
+                title: "Crisis Text Line",
+                meta: "Text HOME to 741741",
+                description: "Free, 24/7 support via text message.",
+                link: "sms:741741?body=HOME"
+            },
+            {
+                title: "International Crisis Lines",
+                meta: "Find your country",
+                description: "IASP directory of crisis centers worldwide.",
+                link: "https://www.iasp.info/resources/Crisis_Centres/"
+            },
+            {
+                title: "The Trevor Project",
+                meta: "LGBTQ+ support",
+                description: "Crisis intervention and suicide prevention for LGBTQ+ youth.",
+                link: "https://www.thetrevorproject.org"
+            }
+        ],
+        therapy: [
+            {
+                title: "Psychology Today Therapist Finder",
+                meta: "Find therapists",
+                description: "Search by location, insurance, and specialty.",
+                link: "https://www.psychologytoday.com/us/therapists"
+            },
+            {
+                title: "BetterHelp",
+                meta: "Online counseling",
+                description: "Affordable online therapy with licensed professionals.",
+                link: "https://www.betterhelp.com"
+            },
+            {
+                title: "Open Path Collective",
+                meta: "Sliding scale $30-60",
+                description: "Affordable therapy for those without insurance.",
+                link: "https://openpathcollective.org"
+            },
+            {
+                title: "NAMI HelpLine",
+                meta: "1-800-950-NAMI",
+                description: "Mental health information and resources.",
+                link: "https://www.nami.org/help"
+            }
+        ],
+        books: [
+            {
+                title: "The Body Keeps the Score",
+                author: "Bessel van der Kolk",
+                description: "Essential reading on trauma and healing.",
+                link: "https://www.amazon.com/Body-Keeps-Score-Healing-Trauma/dp/0143127748"
+            },
+            {
+                title: "Complex PTSD: From Surviving to Thriving",
+                author: "Pete Walker",
+                description: "A practical guide for recovering from childhood trauma.",
+                link: "https://www.amazon.com/Complex-PTSD-Surviving-RECOVERING-CHILDHOOD/dp/1492871842"
+            },
+            {
+                title: "Healing the Fragmented Selves of Trauma Survivors",
+                author: "Janina Fisher",
+                description: "Internal Family Systems approach to trauma.",
+                link: "https://www.amazon.com/Healing-Fragmented-Selves-Trauma-Survivors/dp/0415708235"
+            },
+            {
+                title: "Adult Children of Emotionally Immature Parents",
+                author: "Lindsay C. Gibson",
+                description: "Understanding and healing from difficult childhoods.",
+                link: "https://www.amazon.com/Adult-Children-Emotionally-Immature-Parents/dp/1626251703"
+            }
+        ],
+        podcasts: [
+            {
+                title: "Therapy Chat",
+                host: "Laura Reagan",
+                description: "Trauma and attachment-focused conversations.",
+                link: "https://therapychatpodcast.com"
+            },
+            {
+                title: "The Trauma Therapist Podcast",
+                host: "Guy Macpherson",
+                description: "Conversations with trauma experts.",
+                link: "https://thetraumatherapistproject.com/podcast/"
+            },
+            {
+                title: "Mental Illness Happy Hour",
+                host: "Paul Gilmartin",
+                description: "Honest conversations about mental health.",
+                link: "https://mentalpod.com"
+            },
+            {
+                title: "Healing Trauma",
+                host: "Various",
+                description: "Stories and strategies for trauma recovery.",
+                link: "https://podcasts.apple.com/us/podcast/healing-trauma/id1488925570"
+            }
+        ],
+        apps: [
+            {
+                title: "Insight Timer",
+                description: "Free meditation app with trauma-informed content.",
+                link: "https://insighttimer.com"
+            },
+            {
+                title: "PTSD Coach",
+                description: "VA-developed app for PTSD self-management.",
+                link: "https://www.ptsd.va.gov/appvid/mobile/ptsdcoach_app.asp"
+            },
+            {
+                title: "MindShift",
+                description: "CBT-based tools for anxiety.",
+                link: "https://www.anxietycanada.com/resources/mindshift-cbt/"
+            },
+            {
+                title: "Sanvello",
+                description: "CBT and mindfulness for anxiety and depression.",
+                link: "https://www.sanvello.com"
+            }
+        ]
+    },
+    
+    init() {
+        this.renderAll();
+    },
+    
+    renderAll() {
+        Object.keys(this.data).forEach(category => {
+            const container = document.getElementById(category + 'Resources');
+            if (container) {
+                container.innerHTML = this.data[category].map(item => `
+                    <div class="resource-item">
+                        <div class="resource-title">${item.title}</div>
+                        ${item.meta ? `<div class="resource-meta">${item.meta}</div>` : ''}
+                        ${item.author ? `<div class="resource-meta">by ${item.author}</div>` : ''}
+                        <div class="resource-description">${item.description}</div>
+                        <a href="${item.link}" target="_blank" rel="noopener" class="resource-link">Access Resource →</a>
+                    </div>
+                `).join('');
+            }
+        });
+    }
+};
+
+window.ResourcesModule = ResourcesModule;
