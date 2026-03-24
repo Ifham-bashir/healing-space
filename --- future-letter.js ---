@@ -1,0 +1,140 @@
+/**
+ * Future Letter Module
+ * Time-locked letters to future self
+ */
+
+const FutureLetterModule = {
+    init() {
+        this.initComposer();
+        this.renderVault();
+    },
+    
+    initComposer() {
+        // Preset date selectors
+        document.getElementById('unlockPreset')?.addEventListener('change', (e) => {
+            const preset = e.target.value;
+            if (!preset) return;
+            
+            const date = new Date();
+            switch(preset) {
+                case '1week': date.setDate(date.getDate() + 7); break;
+                case '1month': date.setMonth(date.getMonth() + 1); break;
+                case '3months': date.setMonth(date.getMonth() + 3); break;
+                case '6months': date.setMonth(date.getMonth() + 6); break;
+                case '1year': date.setFullYear(date.getFullYear() + 1); break;
+            }
+            
+            document.getElementById('unlockDate').value = date.toISOString().split('T')[0];
+        });
+        
+        // Save letter
+        document.getElementById('saveLetter')?.addEventListener('click', () => {
+            this.saveLetter();
+        });
+        
+        // View vault
+        document.getElementById('viewLetters')?.addEventListener('click', () => {
+            const vault = document.getElementById('lettersVault');
+            vault.style.display = vault.style.display === 'none' ? 'block' : 'none';
+            if (vault.style.display !== 'none') this.renderVault();
+        });
+        
+        // Vault tabs
+        document.querySelectorAll('.letters-tabs .tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.letters-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.renderVault(btn.dataset.tab);
+            });
+        });
+    },
+    
+    saveLetter() {
+        const subject = document.getElementById('letterSubject').value || 'Letter to Future Me';
+        const content = document.getElementById('letterContent').value.trim();
+        const unlockDate = document.getElementById('unlockDate').value;
+        
+        if (!content) {
+            alert('Please write something to your future self');
+            return;
+        }
+        
+        if (!unlockDate) {
+            alert('Please select when this letter should unlock');
+            return;
+        }
+        
+        const letter = {
+            id: UserData.generateId(),
+            subject,
+            content,
+            unlockDate,
+            created: new Date().toISOString(),
+            read: false
+        };
+        
+        UserData.addToArray('futureLetters', letter);
+        
+        // Reset form
+        document.getElementById('letterSubject').value = '';
+        document.getElementById('letterContent').value = '';
+        document.getElementById('unlockDate').value = '';
+        document.getElementById('unlockPreset').value = '';
+        
+        alert('🔒 Your letter has been locked and saved. It will unlock on ' + unlockDate);
+    },
+    
+    renderVault(filter = 'locked') {
+        const container = document.getElementById('lettersList');
+        let letters = UserData.get('futureLetters') || [];
+        const now = new Date().toISOString().split('T')[0];
+        
+        // Categorize
+        letters = letters.map(l => ({
+            ...l,
+            status: l.read ? 'read' : (l.unlockDate <= now ? 'unlocked' : 'locked')
+        }));
+        
+        // Filter
+        const filtered = letters.filter(l => l.status === filter);
+        
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No ${filter} letters</p>`;
+            return;
+        }
+        
+        container.innerHTML = filtered.map(letter => `
+            <div class="letter-item ${letter.status}">
+                <div class="letter-subject">${letter.subject}</div>
+                <div class="letter-date">
+                    ${letter.status === 'locked' ? `🔒 Unlocks: ${letter.unlockDate}` : 
+                      letter.status === 'unlocked' ? `🔓 Unlocked!` : 
+                      `✓ Read on: ${letter.readDate ? window.formatDate(letter.readDate) : 'Unknown'}`}
+                    <span style="float: right; font-size: 0.8rem;">Written: ${window.formatDate(letter.created)}</span>
+                </div>
+                ${letter.status !== 'locked' ? `
+                    <div class="letter-content">${letter.content}</div>
+                    ${letter.status === 'unlocked' ? `
+                        <button onclick="FutureLetterModule.markRead('${letter.id}')" class="btn btn-secondary" style="margin-top: 1rem;">
+                            Mark as Read
+                        </button>
+                    ` : ''}
+                ` : '<div style="margin-top: 1rem; font-style: italic; color: var(--text-secondary);">This letter is locked until the unlock date.</div>'}
+            </div>
+        `).join('');
+    },
+    
+    markRead(id) {
+        const letters = UserData.get('futureLetters') || [];
+        const updated = letters.map(l => {
+            if (l.id === id) {
+                return { ...l, read: true, readDate: new Date().toISOString() };
+            }
+            return l;
+        });
+        UserData.save('futureLetters', updated);
+        this.renderVault('unlocked');
+    }
+};
+
+window.FutureLetterModule = FutureLetterModule;
