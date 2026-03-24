@@ -1,0 +1,193 @@
+/**
+ * Inner Child Module
+ * Doll companion, voice notes, and messaging to younger self
+ */
+
+const InnerChildModule = {
+    init() {
+        this.doll = document.getElementById('dollAvatar');
+        this.status = document.getElementById('dollStatus');
+        this.messages = document.getElementById('dollMessages');
+        this.recorder = document.getElementById('voiceRecorder');
+        this.recordingsList = document.getElementById('recordingsList');
+        
+        this.initDollInteractions();
+        this.initVoiceRecorder();
+        this.initJournal();
+        this.loadRecordings();
+    },
+    
+    initDollInteractions() {
+        const actions = {
+            hug: () => {
+                this.doll.style.transform = 'scale(1.3)';
+                this.setStatus("Sending you a warm hug. You're not alone.");
+                this.addMessage("🤗 Hug sent! Your younger self feels held.");
+                setTimeout(() => this.doll.style.transform = '', 1000);
+            },
+            talk: () => {
+                document.getElementById('innerChildInput').focus();
+                this.setStatus("I'm listening. What does your younger self want to say?");
+            },
+            voice: () => {
+                this.recorder.style.display = this.recorder.style.display === 'none' ? 'block' : 'none';
+                this.setStatus(this.recorder.style.display === 'none' ? 
+                    "Your companion is here for you" : "Speak from your heart. Your voice matters.");
+            },
+            care: () => {
+                this.doll.textContent = '🧸✨';
+                this.setStatus("You're taking such good care of yourself. That matters.");
+                this.addMessage("💝 Self-care recorded. Your younger self is grateful.");
+                setTimeout(() => this.doll.textContent = '🧸', 2000);
+            }
+        };
+        
+        document.querySelectorAll('.doll-action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                if (actions[action]) actions[action]();
+            });
+        });
+        
+        // Doll click easter egg
+        this.doll.addEventListener('click', () => {
+            const messages = [
+                "I'm proud of you for showing up.",
+                "Your feelings are valid, always.",
+                "It's okay to rest. You don't have to earn it.",
+                "You're doing better than you think.",
+                "I believe in your healing."
+            ];
+            this.addMessage(messages[Math.floor(Math.random() * messages.length)]);
+        });
+    },
+    
+    setStatus(text) {
+        this.status.textContent = text;
+        this.status.style.animation = 'none';
+        setTimeout(() => this.status.style.animation = '', 10);
+    },
+    
+    addMessage(text) {
+        const msg = document.createElement('div');
+        msg.className = 'doll-message-item';
+        msg.textContent = text;
+        msg.style.cssText = 'padding: 0.5rem; margin: 0.5rem 0; background: rgba(156,175,136,0.1); border-radius: 8px; font-size: 0.9rem; animation: fadeIn 0.5s;';
+        this.messages.prepend(msg);
+        setTimeout(() => msg.remove(), 5000);
+    },
+    
+    initVoiceRecorder() {
+        let mediaRecorder;
+        let audioChunks = [];
+        
+        const startBtn = document.getElementById('startRecord');
+        const stopBtn = document.getElementById('stopRecord');
+        const indicator = document.getElementById('recordingIndicator');
+        
+        startBtn?.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    this.saveRecording(audioBlob);
+                };
+                
+                mediaRecorder.start();
+                indicator.classList.add('active');
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } catch (err) {
+                alert('Could not access microphone. Please check permissions.');
+            }
+        });
+        
+        stopBtn?.addEventListener('click', () => {
+            mediaRecorder?.stop();
+            indicator.classList.remove('active');
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            mediaRecorder?.stream.getTracks().forEach(track => track.stop());
+        });
+    },
+    
+    saveRecording(blob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const recording = {
+                id: UserData.generateId(),
+                data: reader.result,
+                date: new Date().toISOString(),
+                duration: '0:00' // Would need actual duration tracking
+            };
+            UserData.addToArray('voiceNotes', recording);
+            this.loadRecordings();
+            this.addMessage("🎙️ Voice note saved for your younger self.");
+        };
+        reader.readAsDataURL(blob);
+    },
+    
+    loadRecordings() {
+        const recordings = UserData.get('voiceNotes') || [];
+        if (!this.recordingsList) return;
+        
+        this.recordingsList.innerHTML = recordings.map(rec => `
+            <div class="recording-item" style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem; background: white; border-radius: 8px; margin-bottom: 0.5rem;">
+                <audio controls src="${rec.data}" style="flex: 1; height: 30px;"></audio>
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">${window.formatDate(rec.date)}</span>
+                <button onclick="InnerChildModule.deleteRecording('${rec.id}')" style="background: none; border: none; cursor: pointer; color: #e74c3c;">🗑️</button>
+            </div>
+        `).join('');
+    },
+    
+    deleteRecording(id) {
+        UserData.removeFromArray('voiceNotes', id);
+        this.loadRecordings();
+    },
+    
+    initJournal() {
+        const input = document.getElementById('innerChildInput');
+        const saveBtn = document.getElementById('saveChildMessage');
+        const viewBtn = document.getElementById('viewChildMessages');
+        const container = document.getElementById('childMessagesContainer');
+        
+        saveBtn?.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (!text) return;
+            
+            UserData.addToArray('childMessages', {
+                id: UserData.generateId(),
+                text: text,
+                date: new Date().toISOString()
+            });
+            
+            input.value = '';
+            this.addMessage("💌 Message saved for your younger self.");
+            if (container.style.display !== 'none') this.loadJournal();
+        });
+        
+        viewBtn?.addEventListener('click', () => {
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+            viewBtn.textContent = container.style.display === 'none' ? '📖 View Past' : '👁️ Hide';
+            if (container.style.display !== 'none') this.loadJournal();
+        });
+    },
+    
+    loadJournal() {
+        const container = document.getElementById('childMessagesContainer');
+        const messages = UserData.get('childMessages') || [];
+        
+        container.innerHTML = messages.length ? messages.map(msg => `
+            <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 3px solid var(--accent-sage);">
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">${window.formatDate(msg.date)}</div>
+                <div style="font-family: var(--font-handwriting); font-size: 1.1rem;">${msg.text}</div>
+            </div>
+        `).join('') : '<p style="text-align: center; color: var(--text-secondary);">No messages yet.</p>';
+    }
+};
+
+window.InnerChildModule = InnerChildModule;
